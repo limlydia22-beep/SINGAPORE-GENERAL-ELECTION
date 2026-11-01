@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Singapore General Election Results 2015–2025</title>
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f4f4f2; --surface:#fcfcfb; --border:#e3e2de; --grid:#ecebe7;
+  --text:#0b0b0b; --text2:#52514e; --muted:#7a7975; --accent:#2a78d6;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4; --s6:#008300; --s7:#6250d6; --s8:#e34948; --other:#a3a29d;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    color-scheme:dark;
+    --bg:#121211; --surface:#1a1a19; --border:#2e2e2c; --grid:#262624;
+    --text:#f0efec; --text2:#c3c2b7; --muted:#8f8e88; --accent:#3987e5;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181; --s6:#008300; --s7:#9085e9; --s8:#e66767; --other:#6b6a66;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text)}
+header{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:5}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+h1{font-size:18px;margin:0;padding:14px 0 4px}
+.sub{color:var(--text2);font-size:13px;margin:0 0 10px}
+nav{display:flex;gap:6px;padding-bottom:10px;overflow-x:auto}
+nav button{flex:0 0 auto;border:1px solid var(--border);background:var(--bg);color:var(--text);padding:8px 16px;border-radius:999px;font:inherit;font-weight:600;cursor:pointer}
+nav button[aria-selected=true]{background:var(--text);color:var(--surface);border-color:var(--text)}
+main{padding:16px 0 40px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px}
+.card h2{font-size:16px;margin:0 0 4px}
+.card .note{color:var(--text2);font-size:13px;margin:0 0 12px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:16px}
+.tile{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px}
+.tile .k{color:var(--text2);font-size:12px}
+.tile .v{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+.tile .d{color:var(--muted);font-size:12px}
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;vertical-align:middle;margin-right:6px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--text2);margin-top:10px}
+/* seat strip */
+.seatbar{display:flex;gap:2px;height:28px}
+.seatbar div{border-radius:4px;min-width:3px}
+/* horizontal bars */
+.hb{display:grid;grid-template-columns:minmax(64px,auto) 1fr 64px;gap:6px 10px;align-items:center;font-size:13px}
+.hb .lab{color:var(--text);font-weight:600;white-space:nowrap}
+.hb .track{height:14px;position:relative}
+.hb .bar{height:100%;border-radius:0 4px 4px 0;min-width:2px}
+.hb .val{color:var(--text2);font-variant-numeric:tabular-nums;text-align:right}
+.hb.group .track{height:10px}
+.hb .yr{color:var(--muted);font-weight:400;font-size:12px}
+.hb .gap{grid-column:1/-1;height:4px}
+/* controls */
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+input[type=search]{flex:1 1 220px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font:inherit}
+.seg{display:flex;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:var(--bg);color:var(--text2);padding:8px 12px;font:inherit;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--text);color:var(--surface)}
+select{padding:9px 10px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font:inherit}
+/* constituency cards */
+.cons{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.cc{border:1px solid var(--border);border-radius:10px;padding:12px;background:var(--surface)}
+.cc h3{font-size:15px;margin:0;display:flex;justify-content:space-between;gap:8px}
+.tag{font-size:11px;font-weight:600;color:var(--text2);border:1px solid var(--border);border-radius:6px;padding:1px 6px;white-space:nowrap}
+.cc .meta{color:var(--muted);font-size:12px;margin:2px 0 8px}
+.res{margin:8px 0 0}
+.res .row{display:flex;justify-content:space-between;font-size:13px;gap:8px}
+.res .row b{font-weight:600}
+.res .names{color:var(--muted);font-size:12px;margin:1px 0 3px}
+.res .track{height:8px;background:var(--grid);border-radius:4px;overflow:hidden}
+.res .bar{height:100%;border-radius:0 4px 4px 0}
+.won{font-size:11px;color:var(--text2);margin-left:4px}
+details summary{cursor:pointer;color:var(--accent);font-size:12px;margin-top:6px}
+/* tables */
+.tbl{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+.tbl th,.tbl td{padding:7px 8px;border-bottom:1px solid var(--grid);text-align:right;white-space:nowrap}
+.tbl th:first-child,.tbl td:first-child{text-align:left;white-space:normal}
+.tbl th{color:var(--text2);font-weight:600;font-size:12px}
+.scroll{overflow-x:auto}
+.empty{color:var(--muted);padding:16px 0;text-align:center}
+.tip{position:fixed;pointer-events:none;background:var(--text);color:var(--surface);font-size:12px;padding:6px 8px;border-radius:6px;z-index:20;display:none;max-width:240px}
+footer{color:var(--text2);font-size:12px;padding:0 0 32px}
+footer a,.card a{color:var(--accent)}
+.warn{border-left:3px solid var(--s4);padding:8px 12px;background:var(--surface);border-radius:6px;font-size:13px;color:var(--text2);margin-bottom:16px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.two .card{margin-bottom:0}
+@media (max-width:520px){.tile .v{font-size:22px}.card{padding:14px}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <h1>Singapore General Election Results</h1>
+  <p class="sub">GE2015 · GE2020 · GE2025 — Parliamentary general elections</p>
+  <nav role="tablist" id="tabs"></nav>
+</div></header>
+<main class="wrap" id="app"></main>
+<footer class="wrap">
+  <p><b>Source:</b> Elections Department Singapore (ELD), “Parliamentary General Election Results by Candidate”, published on <a href="https://data.gov.sg/datasets/d_581a30bee57fa7d8383d6bc94739ad00/view" target="_blank" rel="noopener">data.gov.sg</a>. Official results: <a href="https://www.eld.gov.sg/elections_past_parliamentary.html" target="_blank" rel="noopener">eld.gov.sg</a>.</p>
+  <p>Vote shares are each party's share of valid votes in the constituencies it contested, added up nationally; walkovers (no vote) are counted for seats only. National totals here are calculated from the per-constituency figures and may differ very slightly from ELD's published national figures because of rounding. This is an unofficial app: please check important figures against ELD.</p>
+</footer>
+<div class="tip" id="tip"></div>
+<script>
+const DATA = {"2015":[{"name":"Aljunied","type":"GRC","results":[{"party":"WP","candidates":["Chen Show Mao","Sylvia Lim","Low Thia Khiang","Md Faisal Bin Abdul Manap","Pritam Singh"],"votes":70050,"pct":0.5096},{"party":"PAP","candidates":["Chau Eng Leong","K Muralidharan Pillai","Lye Thiam Fatt Joseph Victor","Shamsul Kamar Bin Mohamed Razali","Yeo Guat Kwang"],"votes":67424,"pct":0.4904}],"seats":5,"winner":"WP"},{"name":"Ang Mo Kio","type":"GRC","results":[{"party":"PAP","candidates":["Ang Hin Kee","David Darryl Wilson","Gan Thiam Poh","Intan Azura Binte Mokhtar","Koh Poh Koon","Lee Hsien Loong"],"votes":135316,"pct":0.7864},{"party":"RP","candidates":["Goh Keow Wah","Jesse Loo Hoe Bock","Roy Ngerng Yi Ling","Osman Sulaiman","M Ravi","Siva Chandran"],"votes":36758,"pct":0.2136}],"seats":6,"winner":"PAP"},{"name":"Bishan-Toa Payoh","type":"GRC","results":[{"party":"PAP","candidates":["Chee Hong Tat","Chong Kee Hiong","Ng Eng Hen","Saktiandi Bin Supaat","Josephine Teo"],"votes":86701,"pct":0.7359},{"party":"SPP","candidates":["Law Kim Hwee","Long YaoGuang, Don Bryan","Mohamad Abdillah Bin Zamzuri","Mohamad Hamim Bin Aliyas","Pwee Yek Kwan Benjamin"],"votes":31108,"pct":0.2641}],"seats":5,"winner":"PAP"},{"name":"Bukit Batok","type":"SMC","results":[{"party":"PAP","candidates":["David Ong Kim Huat"],"votes":18234,"pct":0.7302},{"party":"SDP","candidates":["Sadasivam V"],"votes":6588,"pct":0.2638},{"party":"Independent","candidates":["Samir Salim Neji"],"votes":150,"pct":0.006}],"seats":1,"winner":"PAP"},{"name":"Bukit Panjang","type":"SMC","results":[{"party":"PAP","candidates":["Teo Ho Pin"],"votes":21954,"pct":0.6838},{"party":"SDP","candidates":["Khung Wai Yeen"],"votes":10152,"pct":0.3162}],"seats":1,"winner":"PAP"},{"name":"Chua Chu Kang","type":"GRC","results":[{"party":"PAP","candidates":["Gan Kim Yong","Low Yen Ling","Yee Chia Hsing","Zaqy Mohamad"],"votes":84850,"pct":0.7691},{"party":"PPP","candidates":["Goh Meng Seng","Lee Tze Shih","Low Wai Choo","Syafarin Bin Sarif"],"votes":25475,"pct":0.2309}],"seats":4,"winner":"PAP"},{"name":"East Coast","type":"GRC","results":[{"party":"PAP","candidates":["Lee Yi Shyan","Lim Swee Say","Mohd Maliki Bin Osman","Tan Soon Neo Jessica"],"votes":55093,"pct":0.6073},{"party":"WP","candidates":["Gerald Giam Yean Song","Daniel Goh Pei Siong","Mohamed Fairoz Bin Shariff","Leon Perera"],"votes":35622,"pct":0.3927}],"seats":4,"winner":"PAP"},{"name":"Fengshan","type":"SMC","results":[{"party":"PAP","candidates":["Cheryl Chan Wei Ling"],"votes":12417,"pct":0.575},{"party":"WP","candidates":["Dennis Tan Lip Fong"],"votes":9176,"pct":0.425}],"seats":1,"winner":"PAP"},{"name":"Holland-Bukit Timah","type":"GRC","results":[{"party":"PAP","candidates":["Christopher De Souza","Liang Eng Hwa","Sim Ann","Vivian Balakrishnan"],"votes":62786,"pct":0.666},{"party":"SDP","candidates":["Chee Soon Juan","Chong Wai Fung","Md Sidek Bin Mallek","Paul Anatharajah Tambyah"],"votes":31494,"pct":0.334}],"seats":4,"winner":"PAP"},{"name":"Hong Kah North","type":"SMC","results":[{"party":"PAP","candidates":["Amy Khor Lean Suan"],"votes":19628,"pct":0.7476},{"party":"SPP","candidates":["Ravi Philemon"],"votes":6627,"pct":0.2524}],"seats":1,"winner":"PAP"},{"name":"Hougang","type":"SMC","results":[{"party":"WP","candidates":["Png Eng Huat"],"votes":13027,"pct":0.5766},{"party":"PAP","candidates":["Lee Hong Chuang"],"votes":9565,"pct":0.4234}],"seats":1,"winner":"WP"},{"name":"Jalan Besar","type":"GRC","results":[{"party":"PAP","candidates":["Heng Chee How","Lily Neo","Denise Phua Lay Peng","Yaacob Ibrahim"],"votes":63644,"pct":0.6775},{"party":"WP","candidates":["Chan Sio Phing Frieda (Zeng Xiao Ping)","L Somasundaram","Redzwan Hafidz Abdul Razak","Sim Tian Hock (Shen TianFu)"],"votes":30302,"pct":0.3225}],"seats":4,"winner":"PAP"},{"name":"Jurong","type":"GRC","results":[{"party":"PAP","candidates":["Ang Wei Neng","Desmond Lee","Rahayu Binte Mahzam","Tharman Shanmugaratnam","Tan Wu Meng"],"votes":95228,"pct":0.7929},{"party":"SGF","candidates":["Foo Ming Jin David","Sukdeu Singh","Tan Peng Aann","Wong Chee Wai","Wong Soon Hong"],"votes":24869,"pct":0.2071}],"seats":5,"winner":"PAP"},{"name":"MacPherson","type":"SMC","results":[{"party":"PAP","candidates":["Tin Pei Ling"],"votes":17251,"pct":0.656},{"party":"WP","candidates":["Chen JiaXi"],"votes":8833,"pct":0.3359},{"party":"NSP","candidates":["Cheo Chai Chen"],"votes":215,"pct":0.0082}],"seats":1,"winner":"PAP"},{"name":"Marine Parade","type":"GRC","results":[{"party":"PAP","candidates":["Fatimah Binte Abdul Lateef","Goh Chok Tong","Seah Kian Peng","Tan Chuan-Jin","Tong Chun Fai Edwin Charles"],"votes":85138,"pct":0.6407},{"party":"WP","candidates":["Firuz Khan","He Tingru","Ng Foo Eng","Terence Tan","Yee Jenn Jong"],"votes":47753,"pct":0.3593}],"seats":5,"winner":"PAP"},{"name":"Marsiling-Yew Tee","type":"GRC","results":[{"party":"PAP","candidates":["Halimah Yacob","Ong Teng Koon","Lawrence Wong","Alex Yam Ziming"],"votes":68546,"pct":0.6873},{"party":"SDP","candidates":["Damanhuri Bin Abas","Lim Boon Heng","Tan Liang Joo John","Wong Souk Yee"],"votes":31185,"pct":0.3127}],"seats":4,"winner":"PAP"},{"name":"Mountbatten","type":"SMC","results":[{"party":"PAP","candidates":["Lim Biow Chuan"],"votes":15331,"pct":0.7186},{"party":"SPP","candidates":["Jeannette Chong - Aruldoss"],"votes":6004,"pct":0.2814}],"seats":1,"winner":"PAP"},{"name":"Nee Soon","type":"GRC","results":[{"party":"PAP","candidates":["K Shanmugam","Kwek Hian Chuan","Lee Bee Wah","Muhammad Faishal Ibrahim","Ng Kok Kwang Louis"],"votes":82287,"pct":0.6683},{"party":"WP","candidates":["Foo Seck Guan","Gurmit Singh S/O Sadhu Singh","Koh Tiong Yee","Cheryl Loh Xiu Wen","Ron Tan Jun Yen"],"votes":40841,"pct":0.3317}],"seats":5,"winner":"PAP"},{"name":"Pasir Ris-Punggol","type":"GRC","results":[{"party":"PAP","candidates":["Janil Puthucheary","Ng Chee Meng","Sun XueLing","Teo Chee Hean","Teo Ser Luck","Zainal Bin Sapari"],"votes":125166,"pct":0.7289},{"party":"SDA","candidates":["Abu Bin Mohamed","Harminder Pal Singh S/O Gurcharan Singh","Lim Bak Chuan Desmond","Lim Tung Hee Arthero","Ong Teik Seng","Wong Way Weng"],"votes":46550,"pct":0.2711}],"seats":6,"winner":"PAP"},{"name":"Pioneer","type":"SMC","results":[{"party":"PAP","candidates":["Cedric Foo Chee Keng"],"votes":18017,"pct":0.7635},{"party":"NSP","candidates":["Ong Beng Soon Elvin"],"votes":5581,"pct":0.2365}],"seats":1,"winner":"PAP"},{"name":"Potong Pasir","type":"SMC","results":[{"party":"PAP","candidates":["Sitoh Yih Pin"],"votes":10602,"pct":0.6639},{"party":"SPP","candidates":["Loh Woon Lee Lina"],"votes":5368,"pct":0.3361}],"seats":1,"winner":"PAP"},{"name":"Punggol East","type":"SMC","results":[{"party":"PAP","candidates":["Charles Chong You Fook"],"votes":16977,"pct":0.5177},{"party":"WP","candidates":["Lee Li Lian"],"votes":15818,"pct":0.4823}],"seats":1,"winner":"PAP"},{"name":"Radin Mas","type":"SMC","results":[{"party":"PAP","candidates":["Tan Chin Siong"],"votes":20246,"pct":0.7725},{"party":"RP","candidates":["Kumar S/O Appavoo"],"votes":3333,"pct":0.1272},{"party":"Independent","candidates":["Han Hui Hui"],"votes":2630,"pct":0.1003}],"seats":1,"winner":"PAP"},{"name":"Sembawang","type":"GRC","results":[{"party":"PAP","candidates":["Amrin Amin","Khaw Boon Wan","Lim Wee Kiak","Ong Ye Kung","Vikram Nair"],"votes":96718,"pct":0.7228},{"party":"NSP","candidates":["Abdul Rasheed S/O Y Abdul Kuthus","Lim Tong Zhen","Ng Chung Hon","Yadzeth Bin Hairis","Yeo Ren-Yuan"],"votes":37087,"pct":0.2772}],"seats":5,"winner":"PAP"},{"name":"Sengkang West","type":"SMC","results":[{"party":"PAP","candidates":["Lam Pin Min"],"votes":17586,"pct":0.6213},{"party":"WP","candidates":["Koh Choong Yong"],"votes":10721,"pct":0.3787}],"seats":1,"winner":"PAP"},{"name":"Tampines","type":"GRC","results":[{"party":"PAP","candidates":["Baey Yam Keng","Cheng Li Hui","Desmond Choo Pey Ching","Heng Swee Keat","Masagos Zulkifli"],"votes":95305,"pct":0.7207},{"party":"NSP","candidates":["Choong Hon Heng","Fong Chin Leong","Lim Tean","Nor Lella Mardiiiah Bte Mohmed","Teo Kway Huang Sebastian"],"votes":36943,"pct":0.2793}],"seats":5,"winner":"PAP"},{"name":"Tanjong Pagar","type":"GRC","results":[{"party":"PAP","candidates":["Chan Chun Sing","Chia Shi-Lu","Indranee Thurai Rajah","Joan Pereira","Melvin Yong Yik Chye"],"votes":90635,"pct":0.7771},{"party":"SGF","candidates":["Ang Yong Guan","Chirag Praful Desai","Chiu Weng Hoe Melvyn","Mohamad Fahmi Bin Ahmad Rais","Tan Jee Say"],"votes":25998,"pct":0.2229}],"seats":5,"winner":"PAP"},{"name":"West Coast","type":"GRC","results":[{"party":"PAP","candidates":["Foo Mee Har","Lim Hng Kiang","S Iswaran","Patrick Tay Teck Guan"],"votes":71214,"pct":0.7857},{"party":"RP","candidates":["Kenneth Andrew Jeyaretnam","Noraini Bte Yunus","Soh Guan Soon","Zhu LaiCheng"],"votes":19426,"pct":0.2143}],"seats":4,"winner":"PAP"},{"name":"Yuhua","type":"SMC","results":[{"party":"PAP","candidates":["Grace Fu Hai Yien"],"votes":15324,"pct":0.7355},{"party":"SDP","candidates":["Go Hui Leng"],"votes":5512,"pct":0.2645}],"seats":1,"winner":"PAP"}],"2020":[{"name":"Aljunied","type":"GRC","results":[{"party":"WP","candidates":["Gerald Giam Yean Song","Sylvia Lim","Muhamad Faisal Bin Abdul Manap","Leon Perera","Pritam Singh"],"votes":85815,"pct":0.5995},{"party":"PAP","candidates":["Chan Hui Yuh","Chua Eng Leong","Victor Lye Thiam Fatt","Shamsul Kamar Bin Mohamed Razali","Alex Yeo Sheng Chye"],"votes":57330,"pct":0.4005}],"seats":5,"winner":"WP"},{"name":"Ang Mo Kio","type":"GRC","results":[{"party":"PAP","candidates":["Darryl David","Gan Thiam Poh","Lee Hsien Loong","Nadia Ahmad Samdin","Ng Ling Ling"],"votes":124597,"pct":0.7191},{"party":"RP","candidates":["Kenneth Andrew Jeyaretnam","Noraini Bte Yunus","Soh Guan Soon","Yeo Yao Hui, Charles","Zhu Laicheng"],"votes":48677,"pct":0.2809}],"seats":5,"winner":"PAP"},{"name":"Bishan-Toa Payoh","type":"GRC","results":[{"party":"PAP","candidates":["Chee Hong Tat","Chong Kee Hiong","Ng Eng Hen","Saktiandi Bin Supaat"],"votes":62983,"pct":0.6723},{"party":"SPP","candidates":["Steve Chia","Melvyn Chiu","Williamson Lee","Osman Sulaiman"],"votes":30696,"pct":0.3277}],"seats":4,"winner":"PAP"},{"name":"Bukit Batok","type":"SMC","results":[{"party":"PAP","candidates":["Murali Pillai"],"votes":15500,"pct":0.548},{"party":"SDP","candidates":["Chee Soon Juan"],"votes":12787,"pct":0.452}],"seats":1,"winner":"PAP"},{"name":"Bukit Panjang","type":"SMC","results":[{"party":"PAP","candidates":["Liang Eng Hwa"],"votes":18085,"pct":0.5373},{"party":"SDP","candidates":["Paul Ananth Tambyah"],"votes":15576,"pct":0.4627}],"seats":1,"winner":"PAP"},{"name":"Chua Chu Kang","type":"GRC","results":[{"party":"PAP","candidates":["Gan Kim Yong","Low Yen Ling","Don Wee","Zhulkarnain Abdul Rahim"],"votes":59554,"pct":0.5864},{"party":"PSP","candidates":["Abdul Rahman Bin Mohamad","Choo Shaun Ming","Tan Meng Wah","Yuen Kin Pheng"],"votes":42012,"pct":0.4136}],"seats":4,"winner":"PAP"},{"name":"East Coast","type":"GRC","results":[{"party":"PAP","candidates":["Cheryl Chan Wei Ling","Heng Swee Keat","Mohd Maliki Bin Osman","Tan Kiat How","Tan Soon Neo Jessica"],"votes":61144,"pct":0.5339},{"party":"WP","candidates":["Abdul Shariff Aboo Kassim","Foo Seck Guan","Dylan Ng","Nicole Seah","Terence Tan Li-Chern"],"votes":53375,"pct":0.4661}],"seats":5,"winner":"PAP"},{"name":"Holland-Bukit Timah","type":"GRC","results":[{"party":"PAP","candidates":["Edward Chia Bing Hui","De Souza Christopher","Sim Ann","Vivian Balakrishnan"],"votes":71218,"pct":0.6636},{"party":"SDP","candidates":["Min Cheong","James Gomez","Alfred Tan","Tan Jee Say"],"votes":36100,"pct":0.3364}],"seats":4,"winner":"PAP"},{"name":"Hong Kah North","type":"SMC","results":[{"party":"PAP","candidates":["Amy Khor Lean Suan"],"votes":16347,"pct":0.6099},{"party":"PSP","candidates":["Gigene Wong"],"votes":10457,"pct":0.3901}],"seats":1,"winner":"PAP"},{"name":"Hougang","type":"SMC","results":[{"party":"WP","candidates":["Dennis Tan Lip Fong"],"votes":15451,"pct":0.6121},{"party":"PAP","candidates":["Lee Hong Chuang"],"votes":9791,"pct":0.3879}],"seats":1,"winner":"WP"},{"name":"Jalan Besar","type":"GRC","results":[{"party":"PAP","candidates":["Heng Chee How","Denise Phua Lay Peng","Josephine Teo","Wan Rizal"],"votes":64631,"pct":0.6536},{"party":"PV","candidates":["Michael Fang Amin","Leong Sze Hian","Lim Tean","Nor Azlan Bin Sulaiman"],"votes":34261,"pct":0.3464}],"seats":4,"winner":"PAP"},{"name":"Jurong","type":"GRC","results":[{"party":"PAP","candidates":["Huang Wei Zhong Shawn","Rahayu Binte Mahzam","Tan Wu Meng","Tharman Shanmugaratnam","Xie Yao Quan"],"votes":91846,"pct":0.7461},{"party":"RDU","candidates":["Michelle Lee Juen","Liyana Dhamirah","Ravi Philemon","Nicholas Tang","Alec Tok"],"votes":31260,"pct":0.2539}],"seats":5,"winner":"PAP"},{"name":"Kebun Baru","type":"SMC","results":[{"party":"PAP","candidates":["Kwek Hian Chuan"],"votes":13309,"pct":0.6292},{"party":"PSP","candidates":["Kumaran Pillai"],"votes":7842,"pct":0.3708}],"seats":1,"winner":"PAP"},{"name":"MacPherson","type":"SMC","results":[{"party":"PAP","candidates":["Tin Pei Ling"],"votes":19009,"pct":0.7174},{"party":"PPP","candidates":["Goh Meng Seng"],"votes":7489,"pct":0.2826}],"seats":1,"winner":"PAP"},{"name":"Marine Parade","type":"GRC","results":[{"party":"PAP","candidates":["Mohd Fahmi Aliman","Seah Kian Peng","Tan Chuan-Jin","Tan See Leng","Edwin Tong Chun Fai"],"votes":75203,"pct":0.5774},{"party":"WP","candidates":["Azhar Latip","Fadli Fawzi","Nathaniel Koh","Ron Tan Jun Yen","Yee Jenn Jong"],"votes":55047,"pct":0.4226}],"seats":5,"winner":"PAP"},{"name":"Marsiling-Yew Tee","type":"GRC","results":[{"party":"PAP","candidates":["Hany Soh Hui Bin","Lawrence Wong","Alex Yam Ziming","Zaqy Mohamad"],"votes":69813,"pct":0.6318},{"party":"SDP","candidates":["Damanhuri Bin Abas","Khung Wai Yeen","Lim Boon Heng","Benjamin Pwee"],"votes":40690,"pct":0.3682}],"seats":4,"winner":"PAP"},{"name":"Marymount","type":"SMC","results":[{"party":"PAP","candidates":["Gan Siow Huang"],"votes":12173,"pct":0.5504},{"party":"PSP","candidates":["Ang Yong Guan"],"votes":9943,"pct":0.4496}],"seats":1,"winner":"PAP"},{"name":"Mountbatten","type":"SMC","results":[{"party":"PAP","candidates":["Lim Biow Chuan"],"votes":16285,"pct":0.7382},{"party":"PV","candidates":["Sivakumaran Chellappa"],"votes":5775,"pct":0.2618}],"seats":1,"winner":"PAP"},{"name":"Nee Soon","type":"GRC","results":[{"party":"PAP","candidates":["Derrick Goh Soon Hee","K. Shanmugam","Muhammad Faishal Ibrahim","Ng Kok Kwang, Louis","Carrie Tan Huimin"],"votes":86308,"pct":0.619},{"party":"PSP","candidates":["Bowyer Bradley Peter","Kalayarasu Manickam","Muhammad Taufik Bin Supan","S Nallakaruppan","Tay Chye Seng"],"votes":53131,"pct":0.381}],"seats":5,"winner":"PAP"},{"name":"Pasir Ris-Punggol","type":"GRC","results":[{"party":"PAP","candidates":["Janil Puthucheary","Sharael Taha","Desmond Tan","Teo Chee Hean","Yeo Wan Ling"],"votes":100932,"pct":0.6416},{"party":"SDA","candidates":["Abu Bin Mohamed","Harminder Pal Singh s/o Gurcharan Singh","Kuswadi Bin Atnawi","Lim Bak Chuan Desmond","Kelvin Ong Soon Huat"],"votes":37237,"pct":0.2367},{"party":"PV","candidates":["Goh Keow Wah","Lim Kay Cheow Jireh","Mohamed Nassir Ismail","Prabu Ramachandran","Vigneswari VR"],"votes":19147,"pct":0.1217}],"seats":5,"winner":"PAP"},{"name":"Pioneer","type":"SMC","results":[{"party":"PAP","candidates":["Patrick Tay Teck Guan"],"votes":14593,"pct":0.62},{"party":"PSP","candidates":["Lim Cher Hong"],"votes":8289,"pct":0.3522},{"party":"Independent","candidates":["Cheang Peng Wah"],"votes":655,"pct":0.0278}],"seats":1,"winner":"PAP"},{"name":"Potong Pasir","type":"SMC","results":[{"party":"PAP","candidates":["Sitoh Yih Pin"],"votes":11264,"pct":0.6067},{"party":"SPP","candidates":["Jose Raymond"],"votes":7302,"pct":0.3933}],"seats":1,"winner":"PAP"},{"name":"Punggol West","type":"SMC","results":[{"party":"PAP","candidates":["Sun Xueling"],"votes":15655,"pct":0.6098},{"party":"WP","candidates":["Tan Chen Chen"],"votes":10017,"pct":0.3902}],"seats":1,"winner":"PAP"},{"name":"Radin Mas","type":"SMC","results":[{"party":"PAP","candidates":["Melvin Yong Yik Chye"],"votes":16864,"pct":0.7401},{"party":"RP","candidates":["Kumar Appavoo"],"votes":5922,"pct":0.2599}],"seats":1,"winner":"PAP"},{"name":"Sembawang","type":"GRC","results":[{"party":"PAP","candidates":["Lim Wee Kiak","Mariam Jaafar","Ong Ye Kung","Poh Li San","Vikram Nair"],"votes":94176,"pct":0.6729},{"party":"NSP","candidates":["Ng Chung Hon","Sathin s/o Ravindran","Sebastian Teo","Yadzeth Bin Hairis","Yeo Tiong Boon"],"votes":45778,"pct":0.3271}],"seats":5,"winner":"PAP"},{"name":"Sengkang","type":"GRC","results":[{"party":"WP","candidates":["Chua Kheng Wee","He Ting Ru","Jamus Jerome Lim","Raeesah Begum Binte Farid Khan"],"votes":60217,"pct":0.5212},{"party":"PAP","candidates":["Amrin Amin","Lam Pin Min","Lye Hoong Yip Raymond","Ng Chee Meng"],"votes":55319,"pct":0.4788}],"seats":4,"winner":"WP"},{"name":"Tampines","type":"GRC","results":[{"party":"PAP","candidates":["Baey Yam Keng","Cheng Li Hui","Desmond Choo Pey Ching","Koh Poh Koon","Masagos Zulkifli"],"votes":94668,"pct":0.6641},{"party":"NSP","candidates":["Choong Hon Heng","Fong Chin Leong","Mohd Ridzwan Bin Mohammad","Vincent Ng Kian Guan","Yeo Ren-Yuan"],"votes":47875,"pct":0.3359}],"seats":5,"winner":"PAP"},{"name":"Tanjong Pagar","type":"GRC","results":[{"party":"PAP","candidates":["Chan Chun Sing","Eric Chua Swee Leong","Indranee Thurai Rajah","Joan Pereira","Alvin Tan Sheng Hui"],"votes":78330,"pct":0.631},{"party":"PSP","candidates":["A’bas Bin Kasmani","Chua Teck Leong, Michael","Harish Pillay","Low Wei Ling","Soon Jun Wei, Terence"],"votes":45807,"pct":0.369}],"seats":5,"winner":"PAP"},{"name":"West Coast","type":"GRC","results":[{"party":"PAP","candidates":["Ang Wei Neng","Foo Mee Har","Desmond Lee Ti-Seng","Rachel Ong Sin Yen","S Iswaran"],"votes":71658,"pct":0.5168},{"party":"PSP","candidates":["Khoo Poh Tiong Jeffrey","Leong Mun Wai","N. Loganathan","Hazel Poa","Tan Cheng Bock"],"votes":66996,"pct":0.4832}],"seats":5,"winner":"PAP"},{"name":"Yio Chu Kang","type":"SMC","results":[{"party":"PAP","candidates":["Yip Hon Weng"],"votes":14775,"pct":0.6082},{"party":"PSP","candidates":["Kayla Low"],"votes":9519,"pct":0.3918}],"seats":1,"winner":"PAP"},{"name":"Yuhua","type":"SMC","results":[{"party":"PAP","candidates":["Grace Fu Hai Yien"],"votes":14131,"pct":0.7054},{"party":"SDP","candidates":["Robin Low"],"votes":5901,"pct":0.2946}],"seats":1,"winner":"PAP"}],"2025":[{"name":"Aljunied","type":"GRC","results":[{"party":"WP","candidates":["Fadli Fawzi","Gerald Giam Yean Song","Sylvia Lim Swee Lian","Pritam Singh","Kenneth Tiong Boon Kiat"],"votes":79254,"pct":0.5971},{"party":"PAP","candidates":["Ang Zi Yang, Adrian","Chan Hui Yuh","Faisal Abdul Aziz","Jagathishwaran Rajo","Liu Keyuan, Daniel"],"votes":53471,"pct":0.4029}],"seats":5,"winner":"WP"},{"name":"Ang Mo Kio","type":"GRC","results":[{"party":"PAP","candidates":["Darryl David","Jasmin Lau","Lee Hsien Loong","Victor Lye","Nadia Ahmad Samdin"],"votes":115562,"pct":0.7895},{"party":"SUP","candidates":["Vincent Ng Kian Guan","Nigel Ng","Noraini Yunus","Ridhuan Chandran","Zhu Laicheng"],"votes":15874,"pct":0.1085},{"party":"PPP","candidates":["Heng Zheng Dao","Ho Yuen Liung Martinn","Lee Yuru, Samuel","Lim Lian Chin","Thaddeus Shamraj S/O Thomas Selvaraj"],"votes":14929,"pct":0.102}],"seats":5,"winner":"PAP"},{"name":"Bishan-Toa Payoh","type":"GRC","results":[{"party":"PAP","candidates":["Cai Yinzhou","Chee Hong Tat","Elysa Chen","Saktiandi Supaat"],"votes":66455,"pct":0.7518},{"party":"SPP","candidates":["Steve Chia","Melvyn Chiu","Lim Rui Xian","Norhakim"],"votes":21944,"pct":0.2482}],"seats":4,"winner":"PAP"},{"name":"Bukit Gombak","type":"SMC","results":[{"party":"PAP","candidates":["Low Yen Ling"],"votes":17946,"pct":0.7581},{"party":"PSP","candidates":["Harish Pillay"],"votes":5726,"pct":0.2419}],"seats":1,"winner":"PAP"},{"name":"Bukit Panjang","type":"SMC","results":[{"party":"PAP","candidates":["Liang Eng Hwa"],"votes":19152,"pct":0.6138},{"party":"SDP","candidates":["Paul Anantharajah Tambyah"],"votes":12051,"pct":0.3862}],"seats":1,"winner":"PAP"},{"name":"Chua Chu Kang","type":"GRC","results":[{"party":"PAP","candidates":["Choo Pei Ling","Jeffrey Siow","Tan See Leng","Zhulkarnain Abdul Rahim"],"votes":55140,"pct":0.636},{"party":"PSP","candidates":["A'Bas Bin Kasmani","Wendy Low Wei Ling","Lawrence Pek Eng Leong","S Nallakaruppan"],"votes":31562,"pct":0.364}],"seats":4,"winner":"PAP"},{"name":"East Coast","type":"GRC","results":[{"party":"PAP","candidates":["Dinesh Vasu Dash","Hazlina Binte Abdul Halim","Tan Kiat How","Tan Soon Neo Jessica","Tong Chun Fai Edwin Charles"],"votes":80105,"pct":0.5873},{"party":"WP","candidates":["Koh Kim Kui, Nathaniel","Kuan Hon Whye, Jasper","Paris V Parameswari","Sufyan Mikhail Putra Mohd Kamil","Yee Jenn Jong"],"votes":56288,"pct":0.4127}],"seats":5,"winner":"PAP"},{"name":"Holland-Bukit Timah","type":"GRC","results":[{"party":"PAP","candidates":["Edward Chia Bing Hui","Christopher De Souza","Sim Ann","Vivian Balakrishnan"],"votes":86936,"pct":0.7925},{"party":"RDU","candidates":["Mohd Fazli Bin Talip","Nizar Subair","Sharad Kumar","Emily Woo"],"votes":22762,"pct":0.2075}],"seats":4,"winner":"PAP"},{"name":"Hougang","type":"SMC","results":[{"party":"WP","candidates":["Dennis Tan Lip Fong"],"votes":16956,"pct":0.6215},{"party":"PAP","candidates":["Marshall Lim Yu Hui"],"votes":10327,"pct":0.3785}],"seats":1,"winner":"WP"},{"name":"Jalan Besar","type":"GRC","results":[{"party":"PAP","candidates":["Shawn Loh Shou-En","Denise Phua Lay Peng","Mrs Josephine Teo","Wan Rizal"],"votes":70602,"pct":0.7521},{"party":"PAR","candidates":["Chiu Shin Kong","Mohamad Hamim Bin Aliyas","Sarina Binte Abu Hassan","Vigneswari D/O V Ramachandran"],"votes":23267,"pct":0.2479}],"seats":4,"winner":"PAP"},{"name":"Jalan Kayu","type":"SMC","results":[{"party":"PAP","candidates":["Ng Chee Meng"],"votes":14146,"pct":0.5147},{"party":"WP","candidates":["Low Wu Yang Andre"],"votes":13337,"pct":0.4853}],"seats":1,"winner":"PAP"},{"name":"Jurong Central","type":"SMC","results":[{"party":"PAP","candidates":["Xie Yao Quan"],"votes":21947,"pct":0.8051},{"party":"RDU","candidates":["Kala Manickam"],"votes":5313,"pct":0.1949}],"seats":1,"winner":"PAP"},{"name":"Jurong East-Bukit Batok","type":"GRC","results":[{"party":"PAP","candidates":["Grace Fu Hai Yien","Hoe Teck Chye, David","Lee Hong Chuang","Murali Pillai","Rahayu Binte Mahzam"],"votes":99692,"pct":0.7667},{"party":"RDU","candidates":["Harish Mohanadas","Liyana Dhamirah","Marcus Neo Kai Jie","Osman Sulaiman","Ben Puah"],"votes":30342,"pct":0.2333}],"seats":5,"winner":"PAP"},{"name":"Kebun Baru","type":"SMC","results":[{"party":"PAP","candidates":["Kwek Hian Chuan"],"votes":13787,"pct":0.6849},{"party":"PSP","candidates":["Tony Tan Lay Thiam"],"votes":6342,"pct":0.3151}],"seats":1,"winner":"PAP"},{"name":"Marine Parade-Braddell Heights","type":"GRC","walkover":true,"seats":5,"results":[{"party":"PAP","candidates":[],"votes":null,"pct":null}],"winner":"PAP"},{"name":"Marsiling-Yew Tee","type":"GRC","results":[{"party":"PAP","candidates":["Hany Soh Hui Bin","Lawrence Wong","Alex Yam Ziming","Zaqy Mohamad"],"votes":81143,"pct":0.7348},{"party":"SDP","candidates":["Ariffin Sha","Jufri Salim","Alec Tok","Gigene Wong"],"votes":29281,"pct":0.2652}],"seats":4,"winner":"PAP"},{"name":"Marymount","type":"SMC","results":[{"party":"PAP","candidates":["Gan Siow Huang"],"votes":14954,"pct":0.7073},{"party":"PSP","candidates":["Khoo Poh Tiong Jeffrey"],"votes":6187,"pct":0.2927}],"seats":1,"winner":"PAP"},{"name":"Mountbatten","type":"SMC","results":[{"party":"PAP","candidates":["Gho Sze Kee"],"votes":12602,"pct":0.6382},{"party":"Independent","candidates":["Tan Wei Yang, Jeremy"],"votes":7143,"pct":0.3618}],"seats":1,"winner":"PAP"},{"name":"Nee Soon","type":"GRC","results":[{"party":"PAP","candidates":["Goh Hanyan","K. Shanmugam","Jackson Lam Weiliang","Lee Hui Ying","Syed Harun Alhabsyi"],"votes":102974,"pct":0.7381},{"party":"RDU","candidates":["David Foo","Sharon Lin","Pang Heng Chuan","Ravi Philemon","Syed Alwi Ahmad"],"votes":36538,"pct":0.2619}],"seats":5,"winner":"PAP"},{"name":"Pasir Ris-Changi","type":"GRC","results":[{"party":"PAP","candidates":["Indranee Rajah","Valerie Lee","Sharael Taha","Desmond Tan"],"votes":61168,"pct":0.6768},{"party":"SDA","candidates":["Abu Bin Mohamed","Chia Yun Kai","Harminder Pal Singh S/O Gurcharan Singh","Lim Bak Chuan Desmond"],"votes":29213,"pct":0.3232}],"seats":4,"winner":"PAP"},{"name":"Pioneer","type":"SMC","results":[{"party":"PAP","candidates":["Patrick Tay Teck Guan"],"votes":15360,"pct":0.6545},{"party":"PSP","candidates":["Stephanie Tan"],"votes":8110,"pct":0.3455}],"seats":1,"winner":"PAP"},{"name":"Potong Pasir","type":"SMC","results":[{"party":"PAP","candidates":["Alex Yeo Sheng Chye"],"votes":19288,"pct":0.692},{"party":"SPP","candidates":["Lee Jian Chuan Williamson"],"votes":6261,"pct":0.2246},{"party":"PAR","candidates":["Lim Tean"],"votes":2323,"pct":0.0833}],"seats":1,"winner":"PAP"},{"name":"Punggol","type":"GRC","results":[{"party":"PAP","candidates":["Gan Kim Yong","Janil Puthucheary","Sun Xueling","Yeo Wan Ling"],"votes":63745,"pct":0.5517},{"party":"WP","candidates":["Au Chee Meng, Jackson","Dang Pei Yuan","Harpreet Singh Nehal","Siti Alia Binte Abdul Rahim Mattar"],"votes":51789,"pct":0.4483}],"seats":4,"winner":"PAP"},{"name":"Queenstown","type":"SMC","results":[{"party":"PAP","candidates":["Eric Chua Swee Leong"],"votes":20990,"pct":0.8113},{"party":"PAR","candidates":["Mahaboob Batcha S/O Abdul Rasheed"],"votes":4883,"pct":0.1887}],"seats":1,"winner":"PAP"},{"name":"Radin Mas","type":"SMC","results":[{"party":"PAP","candidates":["Melvin Yong Yik Chye"],"votes":15854,"pct":0.6912},{"party":"Independent","candidates":["Darryl Lo Kar Keong"],"votes":5394,"pct":0.2352},{"party":"PAR","candidates":["Kumar S/O Appavoo"],"votes":1689,"pct":0.0736}],"seats":1,"winner":"PAP"},{"name":"Sembawang","type":"GRC","results":[{"party":"PAP","candidates":["Lam Yen Li, Gabriel","Mariam Jaafar","Ng Shi Xuan","Ong Ye Kung","Vikram Nair"],"votes":84159,"pct":0.6776},{"party":"SDP","candidates":["Damanhuri Bin Abas","James Gomez","Lim Boon Heng","Surayah Binte Akbar","Tan Wei Ru Alfred"],"votes":37157,"pct":0.2992},{"party":"NSP","candidates":["Raiyian Chia Boon Siang","Lee Wei","Ng Chung Hon","Verina Ong Weijing","Yadzeth Bin Hairis"],"votes":2878,"pct":0.0232}],"seats":5,"winner":"PAP"},{"name":"Sembawang West","type":"SMC","results":[{"party":"PAP","candidates":["Poh Li San"],"votes":11999,"pct":0.5318},{"party":"SDP","candidates":["Chee Soon Juan"],"votes":10564,"pct":0.4682}],"seats":1,"winner":"PAP"},{"name":"Sengkang","type":"GRC","results":[{"party":"WP","candidates":["Abdul Muhaimin Bin Abdul Malik","Chua Kheng Wee Louis","He Ting Ru","Jamus Jerome Lim Chee Wui"],"votes":66599,"pct":0.5632},{"party":"PAP","candidates":["Elmie Nekmat","Bernadette Giam","Theodora Lai","Lam Pin Min"],"votes":51657,"pct":0.4368}],"seats":4,"winner":"WP"},{"name":"Tampines","type":"GRC","results":[{"party":"PAP","candidates":["Baey Yam Keng","Charlene Chen Yijun","Koh Poh Koon","Masagos Zulkifli","David Neo Chin Wee"],"votes":71589,"pct":0.5202},{"party":"WP","candidates":["Eileen Chong Pei Shan","Muhamad Faisal Bin Abdul Manap","Ong Lue Ping","Tan Khim Teck","Michael Thng Quan Wei"],"votes":65197,"pct":0.4737},{"party":"PPP","candidates":["Arbaah Binte Haroun","Goh Meng Seng","Sim Jun Chin, Derrick","Peter Soh Beng Kiat","Vere Nathan Shen Li"],"votes":596,"pct":0.0043},{"party":"NSP","candidates":["Fong Chin Leong","Mohd Ridzwan Bin Mohammad","Phay Wei Jie","Thamilselvan S/O Karuppaya","Yeo Ren-Yuan"],"votes":249,"pct":0.0018}],"seats":5,"winner":"PAP"},{"name":"Tampines Changkat","type":"SMC","results":[{"party":"PAP","candidates":["Desmond Choo Pey Ching"],"votes":12476,"pct":0.5616},{"party":"WP","candidates":["Foo Seck Guan"],"votes":9741,"pct":0.4384}],"seats":1,"winner":"PAP"},{"name":"Tanjong Pagar","type":"GRC","results":[{"party":"PAP","candidates":["Chan Chun Sing","Foo Cexiang","Joan Pereira","Rachel Ong","Alvin Tan"],"votes":98924,"pct":0.8102},{"party":"PAR","candidates":["Rickson Giauw","Han Hui Hui","Nadarajan Selvamani","Prabu Ramachandran","Soh Lian Chye"],"votes":23169,"pct":0.1898}],"seats":5,"winner":"PAP"},{"name":"West Coast-Jurong West","type":"GRC","results":[{"party":"PAP","candidates":["Ang Wei Neng","Hamid Razak","Shawn Huang Wei Zhong","Cassandra Lee Shi Wee","Desmond Lee Ti-Seng"],"votes":88587,"pct":0.5999},{"party":"PSP","candidates":["Leong Mun Wai","Hazel Poa","Sani Ismail","Sumarleki Amjah","Tan Cheng Bock"],"votes":59078,"pct":0.4001}],"seats":5,"winner":"PAP"},{"name":"Yio Chu Kang","type":"SMC","results":[{"party":"PAP","candidates":["Yip Hon Weng"],"votes":18066,"pct":0.7875},{"party":"PAR","candidates":["Michael Fang Amin"],"votes":4876,"pct":0.2125}],"seats":1,"winner":"PAP"}]};
+const YEARS = [2015, 2020, 2025];
+const PARTY = {
+  PAP:{n:"People's Action Party", c:"--s1"},
+  WP:{n:"Workers' Party", c:"--s2"},
+  PSP:{n:"Progress Singapore Party", c:"--s3"},
+  SDP:{n:"Singapore Democratic Party", c:"--s4"},
+  RDU:{n:"Red Dot United", c:"--s5"},
+  NSP:{n:"National Solidarity Party", c:"--s6"},
+  PAR:{n:"People's Alliance for Reform", c:"--s7"},
+  RP:{n:"Reform Party", c:"--s8"},
+  SPP:{n:"Singapore People's Party"}, SDA:{n:"Singapore Democratic Alliance"},
+  SGF:{n:"Singaporeans First"}, PPP:{n:"People's Power Party"}, PV:{n:"Peoples Voice"},
+  SUP:{n:"Singapore United Party"}, Independent:{n:"Independent candidate"}
+};
+const col = p => `var(${(PARTY[p]&&PARTY[p].c)||'--other'})`;
+const pname = p => (PARTY[p]&&PARTY[p].n)||p;
+const fmt = n => n.toLocaleString('en-SG');
+const pct = (x,d=2) => (x*100).toFixed(d)+'%';
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+// national totals per year
+const NAT = {};
+for (const y of YEARS){
+  const seats={}, votes={}, contested={}; let total=0, walk=0;
+  for (const c of DATA[y]){
+    seats[c.winner]=(seats[c.winner]||0)+c.seats;
+    if (c.walkover){ walk+=c.seats; continue; }
+    for (const r of c.results){ votes[r.party]=(votes[r.party]||0)+r.votes; total+=r.votes; contested[r.party]=(contested[r.party]||0)+1; }
+  }
+  const parties = Object.keys(votes).sort((a,b)=>votes[b]-votes[a]);
+  NAT[y]={seats,votes,total,walk,parties,contested,totalSeats:Object.values(seats).reduce((a,b)=>a+b,0),n:DATA[y].length,
+    grc:DATA[y].filter(c=>c.type==='GRC').length, smc:DATA[y].filter(c=>c.type==='SMC').length};
+}
+
+// tooltip
+const tip=document.getElementById('tip');
+document.addEventListener('pointerover',e=>{const t=e.target.closest('[data-tip]'); if(!t){tip.style.display='none';return;} tip.innerHTML=t.dataset.tip; tip.style.display='block';});
+document.addEventListener('pointermove',e=>{ if(tip.style.display==='block'){ const x=Math.min(e.clientX+12, innerWidth-tip.offsetWidth-8); tip.style.left=x+'px'; tip.style.top=(e.clientY+14)+'px'; }});
+document.addEventListener('scroll',()=>tip.style.display='none',{passive:true});
+
+let state = {view: 2025, q:'', type:'All', party:'All', cq:''};
+const tabs=document.getElementById('tabs');
+function renderTabs(){
+  tabs.innerHTML = [...YEARS.map(y=>[y,'GE'+y]),['compare','Compare years']].map(([v,l])=>
+    `<button role="tab" aria-selected="${state.view==v}" data-view="${v}">${l}</button>`).join('');
+}
+tabs.addEventListener('click',e=>{const b=e.target.closest('button'); if(!b)return; const v=b.dataset.view; state.view = v==='compare'?v:+v; state.party='All'; render(); scrollTo(0,0);});
+
+function legend(ps){ return `<div class="legend">${ps.map(p=>`<span><i class="sw" style="background:${col(p)}"></i>${esc(p)} · ${esc(pname(p))}</span>`).join('')}</div>`; }
+
+function seatStrip(y){
+  const N=NAT[y]; const ps=Object.keys(N.seats).sort((a,b)=>N.seats[b]-N.seats[a]);
+  return `<div class="seatbar" role="img" aria-label="Seats: ${ps.map(p=>p+' '+N.seats[p]).join(', ')}">${ps.map(p=>
+    `<div style="flex:${N.seats[p]};background:${col(p)}" data-tip="<b>${p}</b>: ${N.seats[p]} of ${N.totalSeats} seats (${pct(N.seats[p]/N.totalSeats,1)})"></div>`).join('')}</div>${legend(ps)}`;
+}
+
+function voteBars(y){
+  const N=NAT[y]; const max=N.votes[N.parties[0]]/N.total;
+  return `<div class="hb">${N.parties.map(p=>{const s=N.votes[p]/N.total;
+    return `<div class="lab">${esc(p)}</div><div class="track"><div class="bar" style="width:${s/max*100}%;background:${col(p)}" data-tip="<b>${esc(pname(p))}</b><br>${fmt(N.votes[p])} votes · ${pct(s)}<br>Contested ${N.contested[p]} constituenc${N.contested[p]>1?'ies':'y'}"></div></div><div class="val">${pct(s)}</div>`}).join('')}</div>`;
+}
+
+function consCard(c, y){
+  const head = `<h3><span>${esc(c.name)}</span><span class="tag">${c.type} · ${c.seats} seat${c.seats>1?'s':''}</span></h3>`;
+  if (c.walkover) return `<div class="cc">${head}<div class="meta">GE${y}</div><div class="res"><div class="row"><b><i class="sw" style="background:${col(c.winner)}"></i>${c.winner} <span class="won">won</span></b><span>Uncontested (walkover)</span></div></div></div>`;
+  const total=c.results.reduce((a,r)=>a+r.votes,0);
+  const margin = c.results.length>1 ? c.results[0].pct - c.results[1].pct : null;
+  return `<div class="cc">${head}<div class="meta">GE${y} · ${fmt(total)} valid votes${margin!=null?` · margin ${(margin*100).toFixed(2)} pts`:''}</div>
+  ${c.results.map((r,i)=>`<div class="res"><div class="row"><b><i class="sw" style="background:${col(r.party)}"></i>${esc(r.party)}${i==0?'<span class="won">won</span>':''}</b><span>${fmt(r.votes)} · ${pct(r.pct)}</span></div>
+  <div class="names">${r.candidates.map(esc).join(', ')}</div>
+  <div class="track"><div class="bar" style="width:${r.pct*100}%;background:${col(r.party)}" data-tip="<b>${esc(pname(r.party))}</b><br>${fmt(r.votes)} votes · ${pct(r.pct)}"></div></div></div>`).join('')}</div>`;
+}
+
+function yearView(y){
+  const N=NAT[y]; const pap=N.seats.PAP||0; const papv=N.votes.PAP/N.total;
+  const opp = N.totalSeats-pap;
+  const parties=['All',...Object.keys(N.seats).sort((a,b)=>N.seats[b]-N.seats[a]), ...N.parties.filter(p=>!N.seats[p])];
+  return `
+  <div class="tiles">
+    <div class="tile"><div class="k">Elected seats</div><div class="v">${N.totalSeats}</div><div class="d">${N.grc} GRCs · ${N.smc} SMCs</div></div>
+    <div class="tile"><div class="k"><i class="sw" style="background:${col('PAP')}"></i>PAP seats</div><div class="v">${pap}</div><div class="d">${pct(papv)} of votes</div></div>
+    <div class="tile"><div class="k">Opposition seats</div><div class="v">${opp}</div><div class="d">${Object.keys(N.seats).filter(p=>p!=='PAP').map(p=>p+' '+N.seats[p]).join(', ')||'none'}</div></div>
+    <div class="tile"><div class="k">Valid votes counted</div><div class="v">${(N.total/1e6).toFixed(2)}m</div><div class="d">${N.walk?N.walk+' seats by walkover':'All seats contested'}</div></div>
+  </div>
+  <div class="two">
+    <div class="card"><h2>Seats won</h2><p class="note">Each block is one party's share of the ${N.totalSeats} elected seats.</p>${seatStrip(y)}</div>
+    <div class="card"><h2>National vote share</h2><p class="note">Share of all valid votes cast in contested constituencies.</p>${voteBars(y)}</div>
+  </div>
+  <div class="card" style="margin-top:16px"><h2>Results by constituency</h2><p class="note">${N.n} constituencies in GE${y}. Search by constituency or candidate name.</p>
+    <div class="controls">
+      <input type="search" id="q" placeholder="Search e.g. Aljunied, Sengkang, Pritam Singh" value="${esc(state.q)}" aria-label="Search constituencies">
+      <div class="seg" id="typeSeg">${['All','GRC','SMC'].map(t=>`<button aria-pressed="${state.type===t}" data-t="${t}">${t}</button>`).join('')}</div>
+      <select id="partySel" aria-label="Filter by party">${parties.map(p=>`<option value="${p}" ${state.party===p?'selected':''}>${p==='All'?'All parties':p+' contested'}</option>`).join('')}</select>
+    </div>
+    <div id="consList"></div>
+  </div>`;
+}
+
+function filterCons(y){
+  const q=state.q.trim().toLowerCase();
+  const list=DATA[y].filter(c=>(state.type==='All'||c.type===state.type)
+    && (state.party==='All'||c.results.some(r=>r.party===state.party))
+    && (!q || c.name.toLowerCase().includes(q) || c.results.some(r=>r.candidates.some(n=>n.toLowerCase().includes(q))||r.party.toLowerCase()===q)));
+  document.getElementById('consList').innerHTML = list.length? `<div class="cons">${list.map(c=>consCard(c,y)).join('')}</div>` : `<div class="empty">No constituency matches “${esc(state.q)}” in GE${y}.</div>`;
+}
+
+function compareView(){
+  const all=[...new Set(YEARS.flatMap(y=>NAT[y].parties.concat(Object.keys(NAT[y].seats))))];
+  const main=['PAP','WP','PSP','SDP','RDU','NSP','PAR','RP'].filter(p=>all.includes(p));
+  const rest=all.filter(p=>!main.includes(p)).sort();
+  const row=p=>`<tr><td><i class="sw" style="background:${col(p)}"></i><b>${esc(p)}</b> <span style="color:var(--muted)">${esc(pname(p))}</span></td>${YEARS.map(y=>{const N=NAT[y]; const v=N.votes[p]; return `<td>${N.seats[p]||(v?0:'–')}</td><td>${v?pct(v/N.total):'–'}</td>`}).join('')}</tr>`;
+  // grouped bars, parties with >=3% in any year
+  const big=main.filter(p=>YEARS.some(y=>(NAT[y].votes[p]||0)/NAT[y].total>=0.03));
+  const max=Math.max(...big.flatMap(p=>YEARS.map(y=>(NAT[y].votes[p]||0)/NAT[y].total)));
+  const bars=`<div class="hb group">${big.map((p,i)=>(i?'<div class="gap"></div>':'')+YEARS.map((y,j)=>{const s=(NAT[y].votes[p]||0)/NAT[y].total;
+    return `<div class="lab">${j==0?esc(p):''} <span class="yr">${y}</span></div><div class="track"><div class="bar" style="width:${s/max*100}%;background:${col(p)};opacity:${[0.45,0.7,1][j]}" data-tip="<b>${p}</b> GE${y}<br>${s?pct(s):'Did not contest'}"></div></div><div class="val">${s?pct(s,1):'–'}</div>`}).join('')).join('')}</div>`;
+  const names=[...new Set(YEARS.flatMap(y=>DATA[y].map(c=>c.name)))].sort();
+  return `
+  <div class="card"><h2>Seats and vote share by year</h2><p class="note">Seats won and national vote share. “–” means the party did not contest that year.</p>
+    <div class="scroll"><table class="tbl"><thead><tr><th rowspan="2">Party</th>${YEARS.map(y=>`<th colspan="2" style="text-align:center">GE${y}</th>`).join('')}</tr><tr>${YEARS.map(()=>`<th>Seats</th><th>Votes</th>`).join('')}</tr></thead>
+    <tbody>${main.map(row).join('')}${rest.map(row).join('')}
+    <tr><td><b>Total</b></td>${YEARS.map(y=>`<td><b>${NAT[y].totalSeats}</b></td><td>${fmt(NAT[y].total)}</td>`).join('')}</tr></tbody></table></div>
+  </div>
+  <div class="card"><h2>Vote share change</h2><p class="note">Parties that won at least 3% nationally in any of the three elections. Lighter bars are earlier years.</p>${bars}</div>
+  <div class="card"><h2>Compare a constituency</h2><p class="note">Boundaries are redrawn before each election, so some constituencies only exist in one or two years.</p>
+    <div class="controls"><select id="consSel" aria-label="Pick a constituency"><option value="">Pick a constituency…</option>${names.map(n=>`<option ${state.cq===n?'selected':''}>${esc(n)}</option>`).join('')}</select></div>
+    <div id="consCmp"></div>
+  </div>
+  <div class="card"><h2>Winners at a glance</h2><p class="note">Winning party and its vote share in each constituency. Tap a name to compare it.</p>
+    <div class="controls"><input type="search" id="mq" placeholder="Filter constituencies" aria-label="Filter constituencies"></div>
+    <div class="scroll"><table class="tbl" id="matrix"><thead><tr><th>Constituency</th>${YEARS.map(y=>`<th>GE${y}</th>`).join('')}</tr></thead><tbody></tbody></table></div>
+  </div>`;
+}
+function renderMatrix(){
+  const q=(document.getElementById('mq').value||'').toLowerCase();
+  const names=[...new Set(YEARS.flatMap(y=>DATA[y].map(c=>c.name)))].sort().filter(n=>n.toLowerCase().includes(q));
+  document.querySelector('#matrix tbody').innerHTML = names.map(n=>`<tr><td><a href="#" data-c="${esc(n)}">${esc(n)}</a></td>${YEARS.map(y=>{const c=DATA[y].find(c=>c.name===n); if(!c) return '<td style="color:var(--muted)">–</td>';
+    return `<td><i class="sw" style="background:${col(c.winner)}"></i>${c.winner} ${c.walkover?'<span style="color:var(--muted)">w/o</span>':pct(c.results[0].pct,1)}</td>`}).join('')}</tr>`).join('') || `<tr><td colspan="4" class="empty">No match</td></tr>`;
+}
+function renderConsCmp(){
+  const el=document.getElementById('consCmp'); const n=state.cq;
+  if(!n){el.innerHTML='';return;}
+  el.innerHTML=`<div class="cons">${YEARS.map(y=>{const c=DATA[y].find(c=>c.name===n);
+    return c?consCard(c,y):`<div class="cc"><h3>${esc(n)}</h3><div class="meta">GE${y}</div><div class="empty">Not a constituency in GE${y}</div></div>`}).join('')}</div>`;
+}
+
+const app=document.getElementById('app');
+function render(){
+  renderTabs();
+  if(state.view==='compare'){
+    app.innerHTML=compareView(); renderMatrix(); renderConsCmp();
+    document.getElementById('mq').oninput=renderMatrix;
+    document.getElementById('consSel').onchange=e=>{state.cq=e.target.value; renderConsCmp();};
+    document.getElementById('matrix').onclick=e=>{const a=e.target.closest('a[data-c]'); if(!a)return; e.preventDefault(); state.cq=a.dataset.c; document.getElementById('consSel').value=state.cq; renderConsCmp(); document.getElementById('consSel').scrollIntoView({behavior:'smooth',block:'center'});};
+    return;
+  }
+  const y=state.view; app.innerHTML=yearView(y); filterCons(y);
+  document.getElementById('q').oninput=e=>{state.q=e.target.value; filterCons(y);};
+  document.getElementById('typeSeg').onclick=e=>{const b=e.target.closest('button'); if(!b)return; state.type=b.dataset.t; document.querySelectorAll('#typeSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b)); filterCons(y);};
+  document.getElementById('partySel').onchange=e=>{state.party=e.target.value; filterCons(y);};
+}
+render();
+</script>
+</body>
+</html>
